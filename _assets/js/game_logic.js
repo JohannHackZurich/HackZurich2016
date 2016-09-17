@@ -1,8 +1,11 @@
 var showed = false;
   var text,text_2;
-  var stepsMade = 0;
-  var stepsLeft,goal = 2000;
-  var player1CurrentSteps,player1OldSteps;
+  var STEPSPEED = 5;
+  var stepsMade_player1 = 0 ,stepsMade_player2 = 0;
+  var stepsLeft_player1,stepsLeft_player2,goal = 20000;
+  var player1CurrentSteps,player1OldSteps,player2CurrentSteps,player2OldSteps;
+
+
 	var stage_player1,stage_player2, w, h, loader;
 	var sky, grant, ground, hill, hill2;
   var sky_2, grant_2, ground_2, hill_2, hill2_2;
@@ -105,25 +108,27 @@ var showed = false;
     createjs.Ticker.timingMode = createjs.Ticker.RAF;
     //get all players for demo purposes two players for example two id
     //remember current step count of player1 id and player2 id
-    player1OldSteps = 5000;//get currentSteps
+    player2OldSteps = 6000;//get currentSteps
   }
 	function handleJumpStart() {
 		grant.gotoAndPlay("jump");
 	}
 	function tick(event) {
 		var deltaS = event.delta / 1000;
-    stepsMade += getStepsPlayer1();
-    update_Canvas1(deltaS,stepsMade);
-    update_Canvas2(deltaS,stepsMade);
-
-    if(stepsLeft >  0){
+    stepsMade_player1 += getStepsPlayer1();
+    console.log(getStepsPlayer1());
+    stepsMade_player2 += getStepsPlayer2();
+    var player1Left = update_Canvas1(deltaS,stepsMade_player1);
+    var player2Left = update_Canvas2(deltaS,stepsMade_player2);
+console.log(stepsMade_player1);
+    if(goal - stepsMade_player1 > 0   || goal - stepsMade_player2 >  0){
       stage_player1.update(event);
       stage_player2.update(event);
 
 
     }else{
       if(!showed){
-        text.text = stepsLeft;
+
         stage_player1.update(event);
         stage_player2.update(event);
 
@@ -134,10 +139,10 @@ var showed = false;
 
 	}
   function update_Canvas1(delta,stepsMadePlayer1){
-    stepsLeft = goal - stepsMade;
+    stepsLeft_player1 = goal - stepsMade_player1;
     var position = grant.x + getStepsPlayer1() * delta;
 
-    text.text = stepsLeft;
+    text.text = stepsLeft_player1;
 		var grantW = grant.getBounds().width * grant.scaleX;
 		grant.x = (position >= w + grantW) ? -grantW : position;
 		ground.x = (ground.x - delta * 150) % ground.tileW;
@@ -149,13 +154,14 @@ var showed = false;
 		if (hill2.x + hill2.image.width * hill2.scaleX <= 0) {
 			hill2.x = w;
 		}
+    return stepsLeft_player1;
 
   }
   function update_Canvas2(delta,stepsMadePlayer1){
-    stepsLeft = goal - stepsMade;
+    stepsLeft_player2 = goal - stepsMade_player2;
     var position = grant_2.x + getStepsPlayer1() * delta;
 
-    text.text = stepsLeft;
+    text_2.text = stepsLeft_player2;
 		var grantW = grant_2.getBounds().width * grant_2.scaleX;
 		grant_2.x = (position >= w + grantW) ? -grantW : position;
 		ground_2.x = (ground_2.x - delta * 150) % ground_2.tileW;
@@ -167,18 +173,18 @@ var showed = false;
 		if (hill2_2.x + hill2_2.image.width * hill2_2.scaleX <= 0) {
 			hill2_2.x = w;
 		}
-
+return stepsLeft_player2;
   }
 
   function getStepsPlayer1(){
-  player1CurrentSteps = player1OldSteps + Math.floor((Math.random() * 10) + 1);  //getCurrentSteps
+  player1CurrentSteps = player1OldSteps + Math.floor((Math.random() * 50) + 1) ;  //getCurrentSteps
   var diffSteps = player1CurrentSteps - player1OldSteps;
   player1OldSteps = player1CurrentSteps;
-  return diffSteps;
+  return diffSteps * STEPSPEED;
   }
   function getStepsPlayer2(){
-  player1CurrentSteps = player1OldSteps + Math.floor((Math.random() * 10) + 1);  //getCurrentSteps
-  var diffSteps = player1CurrentSteps - player1OldSteps;
-  player1OldSteps = player1CurrentSteps;
-  return diffSteps;
+  player2CurrentSteps = player2OldSteps + Math.floor((Math.random() * 50) + 1);  //getCurrentSteps
+  var diffSteps = player2CurrentSteps - player2OldSteps;
+  player2OldSteps = player2CurrentSteps;
+  return diffSteps * STEPSPEED;
   }
