@@ -1,10 +1,12 @@
 var showed = false;
-  var text;
+  var text,text_2;
   var stepsMade = 0;
   var stepsLeft,goal = 2000;
   var player1CurrentSteps,player1OldSteps;
 	var stage_player1,stage_player2, w, h, loader;
 	var sky, grant, ground, hill, hill2;
+  var sky_2, grant_2, ground_2, hill_2, hill2_2;
+
 	function game_init() {
 		examples.showDistractor();
 		stage_player1 = new createjs.Stage("player1_Canvas");
@@ -68,18 +70,18 @@ var showed = false;
     player1OldSteps = 5000;//get currentSteps
   }
   function setUpPlayer2(){
-    sky = new createjs.Shape();
-    sky.graphics.beginBitmapFill(loader.getResult("sky")).drawRect(0, 0, w, h);
-    var groundImg = loader.getResult("ground");
-    ground = new createjs.Shape();
-    ground.graphics.beginBitmapFill(groundImg).drawRect(0, 0, w + groundImg.width, groundImg.height);
-    ground.tileW = groundImg.width;
-    ground.y = h - groundImg.height;
-    hill = new createjs.Bitmap(loader.getResult("hill"));
-    hill.setTransform(Math.random() * w, h - hill.image.height * 4 - groundImg.height, 4, 4);
-    hill.alpha = 0.5;
-    hill2 = new createjs.Bitmap(loader.getResult("hill2"));
-    hill2.setTransform(Math.random() * w, h - hill2.image.height * 3 - groundImg.height, 3, 3);
+    sky_2 = new createjs.Shape();
+    sky_2.graphics.beginBitmapFill(loader.getResult("sky")).drawRect(0, 0, w, h);
+    var groundImg_2 = loader.getResult("ground");
+    ground_2 = new createjs.Shape();
+    ground_2.graphics.beginBitmapFill(groundImg_2).drawRect(0, 0, w + groundImg_2.width, groundImg_2.height);
+    ground_2.tileW = groundImg_2.width;
+    ground_2.y = h - groundImg_2.height;
+    hill_2 = new createjs.Bitmap(loader.getResult("hill"));
+    hill_2.setTransform(Math.random() * w, h - hill_2.image.height * 4 - groundImg_2.height, 4, 4);
+    hill_2.alpha = 0.5;
+    hill2_2 = new createjs.Bitmap(loader.getResult("hill2"));
+    hill2_2.setTransform(Math.random() * w, h - hill2_2.image.height * 3 - groundImg_2.height, 3, 3);
     var spriteSheet = new createjs.SpriteSheet({
         framerate: 30,
         "images": [loader.getResult("grant")],
@@ -90,14 +92,14 @@ var showed = false;
           "jump": [26, 63, "run"]
         }
       });
-    grant = new createjs.Sprite(spriteSheet, "run");
-    grant.y = 35;
-    text = new createjs.Text("Hello", "20px Arial", "#ff7700");
-    text.x = 100;
-    text.y = 100;
-    text.textBaseline = "alphabetic";
+    grant_2 = new createjs.Sprite(spriteSheet, "run");
+    grant_2.y = 35;
+    text_2 = new createjs.Text("Hello", "20px Arial", "#ff7700");
+    text_2.x = 100;
+    text_2.y = 100;
+    text_2.textBaseline = "alphabetic";
 
-    stage_player2.addChild(sky, hill, hill2, ground, grant,text);
+    stage_player2.addChild(sky_2, hill_2, hill2_2, ground_2, grant_2,text_2);
 
     stage_player2.addEventListener("stagemousedown", handleJumpStart);
     createjs.Ticker.timingMode = createjs.Ticker.RAF;
@@ -111,9 +113,9 @@ var showed = false;
 	function tick(event) {
 		var deltaS = event.delta / 1000;
 
-    stepsMade += getSteps();
+    stepsMade += getStepsPlayer1();
     stepsLeft = goal - stepsMade;
-    var position = grant.x + getSteps() * deltaS;
+    var position = grant.x + getStepsPlayer1() * deltaS;
 
     text.text = stepsLeft;
 		var grantW = grant.getBounds().width * grant.scaleX;
@@ -133,7 +135,6 @@ var showed = false;
       stage_player2.update(event);
 
 
-      console.log("NOW less than zero");
     }else{
       if(!showed){
         text.text = stepsLeft;
@@ -146,7 +147,7 @@ var showed = false;
     }
 
 	}
-  function getSteps(){
+  function getStepsPlayer1(){
   player1CurrentSteps = player1OldSteps + Math.floor((Math.random() * 10) + 1);  //getCurrentSteps
   var diffSteps = player1CurrentSteps - player1OldSteps;
   player1OldSteps = player1CurrentSteps;
