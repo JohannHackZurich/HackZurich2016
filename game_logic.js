@@ -31,20 +31,18 @@
 	}
 
 	function handleComplete() {
-
     $.ajax({
-      type: "GET",
-      url: "http://hackzurich2016.azurewebsites.net/api/players",
-      success: function(data){
-      examples.hideDistractor();
-      setUpPlayer1(data[0].name,data[0].steps);
-      setUpPlayer2(data[1].name,data[1].steps);
-      createjs.Ticker.addEventListener("tick", tick);
-      console.log(data);
-     }
+   type: "GET",
+   dataType:"xml",
+   url: "http://hackzurich2016.azurewebsites.net/api/players",
+   success: function(data){
+     console.log(data);
+     examples.hideDistractor();
+     setUpPlayer1(data[0].name,data[0].steps);
+     setUpPlayer2(data[1].name,data[1].steps);
+ 		 createjs.Ticker.addEventListener("tick", tick);
+}
 });
-
-
 			}
 
   function setUpPlayer1(initSteps,name){
