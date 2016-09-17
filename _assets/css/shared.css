@@ -31,10 +31,9 @@ h1, h2 {
 h1::after {
 	display: block;
 	content: "";
-	background: url('../art/logo_createjs.svg') no-repeat;
+	background: url('../art/fur-boot.svg') no-repeat;
 	height:1.5em;
-	width: 6em;
-	margin-top: -0.3em;
+	width: 1.5em;
 	float: right;
 }
 

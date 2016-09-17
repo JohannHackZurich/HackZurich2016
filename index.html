@@ -15,6 +15,11 @@
 	  http://code.createjs.com -->
 
 <script id="editable">
+var showed = false;
+  var text;
+  var stepsMade = 0;
+  var stepsLeft,goal = 2000;
+  var player1CurrentSteps,player1OldSteps;
 	var stage, w, h, loader;
 	var sky, grant, ground, hill, hill2;
 	function init() {
@@ -60,9 +65,18 @@
 			});
 		grant = new createjs.Sprite(spriteSheet, "run");
 		grant.y = 35;
-		stage.addChild(sky, hill, hill2, ground, grant);
+    text = new createjs.Text("Hello", "20px Arial", "#ff7700");
+    text.x = 100;
+    text.y = 100;
+    text.textBaseline = "alphabetic";
+
+		stage.addChild(sky, hill, hill2, ground, grant,text);
+
 		stage.addEventListener("stagemousedown", handleJumpStart);
 		createjs.Ticker.timingMode = createjs.Ticker.RAF;
+    //get all players for demo purposes two players for example two id
+    //remember current step count of player1 id and player2 id
+    player1OldSteps = 5000;//get currentSteps
 		createjs.Ticker.addEventListener("tick", tick);
 	}
 	function handleJumpStart() {
@@ -70,7 +84,12 @@
 	}
 	function tick(event) {
 		var deltaS = event.delta / 1000;
-		var position = grant.x + 150 * deltaS;
+
+    stepsMade += getSteps();
+    stepsLeft = goal - stepsMade;
+    var position = grant.x + getSteps() * deltaS;
+
+    text.text = stepsLeft;
 		var grantW = grant.getBounds().width * grant.scaleX;
 		grant.x = (position >= w + grantW) ? -grantW : position;
 		ground.x = (ground.x - deltaS * 150) % ground.tileW;
@@ -82,28 +101,40 @@
 		if (hill2.x + hill2.image.width * hill2.scaleX <= 0) {
 			hill2.x = w;
 		}
-		stage.update(event);
+
+    if(stepsLeft >  0){
+      stage.update(event);
+
+      console.log("NOW less than zero");
+    }else{
+      if(!showed){
+        text.text = stepsLeft;
+        stage.update(event);
+        alert("It's Over!");
+        showed = true;
+      }
+    }
+
 	}
+  function getSteps(){
+  player1CurrentSteps = player1OldSteps + Math.floor((Math.random() * 10) + 1);  //getCurrentSteps
+  var diffSteps = player1CurrentSteps - player1OldSteps;
+  player1OldSteps = player1CurrentSteps;
+  return diffSteps;
+  }
 </script>
 </head>
 
 <body onload="init();">
 <header class="EaselJS">
-	<h1>Sprite Sheets</h1>
+	<h1>BETA</h1>
 
 	<p>
-		An example of defining a <code>SpriteSheet</code>, then displaying it
-		using <code>Sprite</code>. This demo also shows playing named
-		animations (jump and run), setting animation speed, chaining animations,
-		and using <code>Sprite.gotoAndPlay()</code>.
-		Click the stage to initialize a jump, which will continue back into the
-		run when it is complete.
+	This is a Two player Game the one who is faster will win
 	</p>
 
 	<p>
-		<strong>Note:</strong> Some browsers can not load images or access pixel
-		data when running local files, and may throw a security error or not
-		work unless the content is running on a server.
+		<strong>Note:</strong> Just an Showcase!!!!
 	</p>
 </header>
 
