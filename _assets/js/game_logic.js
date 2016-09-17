@@ -3,14 +3,15 @@ var showed = false;
   var stepsMade = 0;
   var stepsLeft,goal = 2000;
   var player1CurrentSteps,player1OldSteps;
-	var stage, w, h, loader;
+	var stage_player1,stage_player2, w, h, loader;
 	var sky, grant, ground, hill, hill2;
 	function game_init() {
 		examples.showDistractor();
-		stage = new createjs.Stage("testCanvas");
+		stage_player1 = new createjs.Stage("player1_Canvas");
+    stage_player2 = new createjs.Stage("player2_Canvas");
 		// grab canvas width and height for later calculations:
-		w = stage.canvas.width;
-		h = stage.canvas.height;
+		w = stage_player1.canvas.width;
+		h = stage_player1.canvas.height;
 		manifest = [
 			{src: "spritesheet_grant.png", id: "grant"},
 			{src: "sky.png", id: "sky"},
@@ -24,44 +25,86 @@ var showed = false;
 	}
 	function handleComplete() {
 		examples.hideDistractor();
-		sky = new createjs.Shape();
-		sky.graphics.beginBitmapFill(loader.getResult("sky")).drawRect(0, 0, w, h);
-		var groundImg = loader.getResult("ground");
-		ground = new createjs.Shape();
-		ground.graphics.beginBitmapFill(groundImg).drawRect(0, 0, w + groundImg.width, groundImg.height);
-		ground.tileW = groundImg.width;
-		ground.y = h - groundImg.height;
-		hill = new createjs.Bitmap(loader.getResult("hill"));
-		hill.setTransform(Math.random() * w, h - hill.image.height * 4 - groundImg.height, 4, 4);
-		hill.alpha = 0.5;
-		hill2 = new createjs.Bitmap(loader.getResult("hill2"));
-		hill2.setTransform(Math.random() * w, h - hill2.image.height * 3 - groundImg.height, 3, 3);
-		var spriteSheet = new createjs.SpriteSheet({
-				framerate: 30,
-				"images": [loader.getResult("grant")],
-				"frames": {"regX": 82, "height": 292, "count": 64, "regY": 0, "width": 165},
-				// define two animations, run (loops, 1.5x speed) and jump (returns to run):
-				"animations": {
-					"run": [0, 25, "run", 1.5],
-					"jump": [26, 63, "run"]
-				}
-			});
-		grant = new createjs.Sprite(spriteSheet, "run");
-		grant.y = 35;
+    setUpPlayer1();
+    setUpPlayer2();
+		createjs.Ticker.addEventListener("tick", tick);
+	}
+  function setUpPlayer1(){
+    sky = new createjs.Shape();
+    sky.graphics.beginBitmapFill(loader.getResult("sky")).drawRect(0, 0, w, h);
+    var groundImg = loader.getResult("ground");
+    ground = new createjs.Shape();
+    ground.graphics.beginBitmapFill(groundImg).drawRect(0, 0, w + groundImg.width, groundImg.height);
+    ground.tileW = groundImg.width;
+    ground.y = h - groundImg.height;
+    hill = new createjs.Bitmap(loader.getResult("hill"));
+    hill.setTransform(Math.random() * w, h - hill.image.height * 4 - groundImg.height, 4, 4);
+    hill.alpha = 0.5;
+    hill2 = new createjs.Bitmap(loader.getResult("hill2"));
+    hill2.setTransform(Math.random() * w, h - hill2.image.height * 3 - groundImg.height, 3, 3);
+    var spriteSheet = new createjs.SpriteSheet({
+        framerate: 30,
+        "images": [loader.getResult("grant")],
+        "frames": {"regX": 82, "height": 292, "count": 64, "regY": 0, "width": 165},
+        // define two animations, run (loops, 1.5x speed) and jump (returns to run):
+        "animations": {
+          "run": [0, 25, "run", 1.5],
+          "jump": [26, 63, "run"]
+        }
+      });
+    grant = new createjs.Sprite(spriteSheet, "run");
+    grant.y = 35;
     text = new createjs.Text("Hello", "20px Arial", "#ff7700");
     text.x = 100;
     text.y = 100;
     text.textBaseline = "alphabetic";
 
-		stage.addChild(sky, hill, hill2, ground, grant,text);
+    stage_player1.addChild(sky, hill, hill2, ground, grant,text);
 
-		stage.addEventListener("stagemousedown", handleJumpStart);
-		createjs.Ticker.timingMode = createjs.Ticker.RAF;
+    stage_player1.addEventListener("stagemousedown", handleJumpStart);
+    createjs.Ticker.timingMode = createjs.Ticker.RAF;
     //get all players for demo purposes two players for example two id
     //remember current step count of player1 id and player2 id
     player1OldSteps = 5000;//get currentSteps
-		createjs.Ticker.addEventListener("tick", tick);
-	}
+  }
+  function setUpPlayer2(){
+    sky = new createjs.Shape();
+    sky.graphics.beginBitmapFill(loader.getResult("sky")).drawRect(0, 0, w, h);
+    var groundImg = loader.getResult("ground");
+    ground = new createjs.Shape();
+    ground.graphics.beginBitmapFill(groundImg).drawRect(0, 0, w + groundImg.width, groundImg.height);
+    ground.tileW = groundImg.width;
+    ground.y = h - groundImg.height;
+    hill = new createjs.Bitmap(loader.getResult("hill"));
+    hill.setTransform(Math.random() * w, h - hill.image.height * 4 - groundImg.height, 4, 4);
+    hill.alpha = 0.5;
+    hill2 = new createjs.Bitmap(loader.getResult("hill2"));
+    hill2.setTransform(Math.random() * w, h - hill2.image.height * 3 - groundImg.height, 3, 3);
+    var spriteSheet = new createjs.SpriteSheet({
+        framerate: 30,
+        "images": [loader.getResult("grant")],
+        "frames": {"regX": 82, "height": 292, "count": 64, "regY": 0, "width": 165},
+        // define two animations, run (loops, 1.5x speed) and jump (returns to run):
+        "animations": {
+          "run": [0, 25, "run", 1.5],
+          "jump": [26, 63, "run"]
+        }
+      });
+    grant = new createjs.Sprite(spriteSheet, "run");
+    grant.y = 35;
+    text = new createjs.Text("Hello", "20px Arial", "#ff7700");
+    text.x = 100;
+    text.y = 100;
+    text.textBaseline = "alphabetic";
+
+    stage_player2.addChild(sky, hill, hill2, ground, grant,text);
+
+    stage_player2.addEventListener("stagemousedown", handleJumpStart);
+    createjs.Ticker.timingMode = createjs.Ticker.RAF;
+    //get all players for demo purposes two players for example two id
+    //remember current step count of player1 id and player2 id
+    player1OldSteps = 5000;//get currentSteps
+  }
 	function handleJumpStart() {
 		grant.gotoAndPlay("jump");
 	}
@@ -86,13 +129,17 @@ var showed = false;
 		}
 
     if(stepsLeft >  0){
-      stage.update(event);
+      stage_player1.update(event);
+      stage_player2.update(event);
+
 
       console.log("NOW less than zero");
     }else{
       if(!showed){
         text.text = stepsLeft;
-        stage.update(event);
+        stage_player1.update(event);
+        stage_player2.update(event);
+
         alert("It's Over!");
         showed = true;
       }
