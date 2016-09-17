@@ -112,23 +112,9 @@ var showed = false;
 	}
 	function tick(event) {
 		var deltaS = event.delta / 1000;
-
     stepsMade += getStepsPlayer1();
-    stepsLeft = goal - stepsMade;
-    var position = grant.x + getStepsPlayer1() * deltaS;
+    update_Canvas1(deltaS,stepsMade);
 
-    text.text = stepsLeft;
-		var grantW = grant.getBounds().width * grant.scaleX;
-		grant.x = (position >= w + grantW) ? -grantW : position;
-		ground.x = (ground.x - deltaS * 150) % ground.tileW;
-		hill.x = (hill.x - deltaS * 30);
-		if (hill.x + hill.image.width * hill.scaleX <= 0) {
-			hill.x = w;
-		}
-		hill2.x = (hill2.x - deltaS * 45);
-		if (hill2.x + hill2.image.width * hill2.scaleX <= 0) {
-			hill2.x = w;
-		}
 
     if(stepsLeft >  0){
       stage_player1.update(event);
@@ -147,6 +133,25 @@ var showed = false;
     }
 
 	}
+  function update_Canvas1(delta,stepsMadePlayer1){
+    stepsLeft = goal - stepsMade;
+    var position = grant.x + getStepsPlayer1() * delta;
+
+    text.text = stepsLeft;
+		var grantW = grant.getBounds().width * grant.scaleX;
+		grant.x = (position >= w + grantW) ? -grantW : position;
+		ground.x = (ground.x - delta * 150) % ground.tileW;
+		hill.x = (hill.x - delta * 30);
+		if (hill.x + hill.image.width * hill.scaleX <= 0) {
+			hill.x = w;
+		}
+		hill2.x = (hill2.x - delta * 45);
+		if (hill2.x + hill2.image.width * hill2.scaleX <= 0) {
+			hill2.x = w;
+		}
+
+  }
+
   function getStepsPlayer1(){
   player1CurrentSteps = player1OldSteps + Math.floor((Math.random() * 10) + 1);  //getCurrentSteps
   var diffSteps = player1CurrentSteps - player1OldSteps;
