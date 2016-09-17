@@ -121,18 +121,25 @@ var showed = false;
     var player1Left = update_Canvas1(deltaS,stepsMade_player1);
     var player2Left = update_Canvas2(deltaS,stepsMade_player2);
 console.log(stepsMade_player1);
-    if(goal - stepsMade_player1 > 0   || goal - stepsMade_player2 >  0){
+    if(goal - stepsMade_player1 > 0   &&  goal - stepsMade_player2 >  0){
       stage_player1.update(event);
       stage_player2.update(event);
 
 
     }else{
+      var won;
+      if(stepsMade_player1 > goal ){
+        won = "Player 1 won!!";
+      }else{
+        won = "Player 2 won!!";
+
+      }
       if(!showed){
 
         stage_player1.update(event);
         stage_player2.update(event);
 
-        alert("It's Over!");
+        alert(won);
         showed = true;
       }
     }
